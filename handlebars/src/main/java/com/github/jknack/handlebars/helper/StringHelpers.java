@@ -235,7 +235,8 @@ public enum StringHelpers implements Helper<Object> {
   /**
    * Returns a new <code>CharSequence</code> that is a subsequence of this sequence.
    * The subsequence starts with the <code>char</code> value at the specified index and
-   * ends with the <code>char</code> value at index <tt>end - 1</tt>
+   * ends with the <code>char</code> value at index <tt>end - 1</tt>.
+   * If start is a negative integer, it will be counted from the right side.
    * Argument: start offset
    *           end offset
    * For example:
@@ -253,6 +254,14 @@ public enum StringHelpers implements Helper<Object> {
    * </pre>
    *
    * If value is Handlebars.java, the output will be "Handlebars".
+   *
+   * or
+   *
+   * <pre>
+   * {{substring value -5}}
+   * </pre>
+   *
+   * If value is Handlebars.java, the output will be ".java".
    */
   substring {
     @Override
@@ -262,6 +271,9 @@ public enum StringHelpers implements Helper<Object> {
       String str = value.toString();
       Integer start = options.param(0);
       Integer end = options.param(1, str.length());
+      if (start < 0) {
+        start = str.length() - start;
+      }
       return str.subSequence(start, end);
     }
   },
